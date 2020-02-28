@@ -2,10 +2,11 @@
 	374
 	Assignment 2
 	
-	SimpleList is a class containing a list of up to as many elements will fit in memory. Elements are pushed in the bottom, but can be
-	removed from any point if they are found in the list. Adding elements beyond the limit will increase the size of the SimpleList by
-	50% (or the nearest integer below 50%). Attempting to remove an element, whether successful or not, will decrease the size of the
-	SimpleList by 25% (or the nearest integer below 25%) if more than 25% of the spaces are empty.
+	SimpleList is a class containing a list of up to as many elements will fit in memory. Elements are pushed in the bottom with add()
+	and on top with append(), but can be removed from any point if they are found in the list. Adding elements beyond the limit will
+	increase the size of the SimpleList by 50% (or the nearest integer below 50%). Attempting to remove an element, whether successful
+	or not, will decrease the size of the SimpleList by 25% (or the nearest integer below 25%) if more than 25% of the spaces are empty.
+	The first and last elements can be read without modifying the list. The current total number of possible locations can also be read.
 */
 
 package cse360assign2;
@@ -114,5 +115,53 @@ public class SimpleList
 	public int[] getList()
 	{
 		return list;
+	}
+	
+	//adds elements to top of list increasing the list by an amount of 50% rounded down if already full
+	public void append(int x)
+	{
+		count++;//increment count when appending an element
+		if(count == list.length + 1)//if list is full
+		{
+			int[] temp = new int[list.length*3/2];//create new array with size increased by 50% of it's size rounded down
+			for(int i = 0; i < count - 1; i++)
+			{
+				temp[i]= list[i];//copy values to new array
+			}
+			list = new int[temp.length];//resize list to be increased by 50% of it's size rounded down
+			for(int i = 0; i < list.length; i++)
+			{
+				list[i]= temp[i];//copy values back
+			}
+		}
+		list[count-1] = x;//place new element in top slot
+	}
+	
+	//return first element or -1 if there are no elements in the list
+	public int first()
+	{
+		int firstEl = -1;
+		if(count > 0)
+		{
+			firstEl = list[0];
+		}
+		return firstEl;
+	}
+	
+	//return last element or -1 if there are no elements in the list
+	public int last()
+	{
+		int lastEl = -1;
+		if(count > 0)
+		{
+			lastEl = list[count-1];
+		}
+		return lastEl;
+	}
+	
+	//return the current number of possible locations in the list
+	public int size()
+	{
+		return list.length;
 	}
 }
