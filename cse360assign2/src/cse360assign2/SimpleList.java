@@ -2,8 +2,10 @@
 	374
 	Assignment 2
 	
-	SimpleList is a class containing a list of up to 10 elements. Elements are pushed in the bottom, but can be removed
-	from any point if they are found in the list.
+	SimpleList is a class containing a list of up to as many elements will fit in memory. Elements are pushed in the bottom, but can be
+	removed from any point if they are found in the list. Adding elements beyond the limit will increase the size of the SimpleList by
+	50% (or the nearest integer below 50%). Attempting to remove an element, whether successful or not, will decrease the size of the
+	SimpleList by 25% (or the nearest integer below 25%) if more than 25% of the spaces are empty.
 */
 
 package cse360assign2;
@@ -20,12 +22,22 @@ public class SimpleList
 		count = 0;//initializes count to 0
 	}
 	
-	//adds elements to bottom of list even when full 
+	//adds elements to bottom of list increasing the list by an amount of 50% rounded down if already full
 	public void add(int x)
 	{
-		if(count < list.length)//unless list is already full
+		count++;//increment count when adding an element
+		if(count == list.length + 1)//if list is full
 		{
-			count++;//increment count when adding an element
+			int[] temp = new int[list.length*3/2];//create new array with size increased by 50% of it's size rounded down
+			for(int i = 0; i < count - 1; i++)
+			{
+				temp[i]= list[i];//copy values to new array
+			}
+			list = new int[temp.length];//resize list to be increased by 50% of it's size rounded down
+			for(int i = 0; i < list.length; i++)
+			{
+				list[i]= temp[i];//copy values back
+			}
 		}
 		for(int i = count - 1; i > 0; i--)
 		{
@@ -35,6 +47,7 @@ public class SimpleList
 	}
 	
 	//removes the bottom-most element from list that contains passed value if it exists
+	//decreases list by an amount of 25% rounded down if more than 25% of the spaces are empty
 	public void remove(int x)
 	{
 		int foundAt = search(x);//if value exists in list
@@ -45,6 +58,19 @@ public class SimpleList
 			for(int i = foundAt; i < count; i++)
 			{
 				list[i] = list[i+1];//shift all existing elements down one overwriting removed element
+			}
+		}
+		if( count * 100 / list.length < 75)//if 25% or more spaces are empty
+		{
+			int[] temp = new int[list.length - list.length*1/4];//create new array with size decreased by 25% of it's size rounded down
+			for(int i = 0; i < count; i++)
+			{
+				temp[i]= list[i];//copy values to new array
+			}
+			list = new int[temp.length];//resize list to be decreased by 25% of it's size rounded down
+			for(int i = 0; i < list.length; i++)
+			{
+				list[i]= temp[i];//copy values back
 			}
 		}
 	}
